@@ -47,9 +47,7 @@ const App = () => {
     setInsightsLoading(true);
 
     try {
-      console.log('Uploading to backend...');
       const backendResponse = await uploadFileToBackend(file);
-      console.log('Backend session ID:', backendResponse.session_id);
       setBackendSessionId(backendResponse.session_id);
 
       const aiInsights = await generateInsights(context);
@@ -123,7 +121,6 @@ const App = () => {
 
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '40px 24px' }}>
-      {/* Header */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -173,7 +170,6 @@ const App = () => {
         </div>
       </div>
 
-      {/* Past Sessions */}
       {showSessions && (
         <div style={{
           marginBottom: '24px',
@@ -263,7 +259,6 @@ const App = () => {
             </p>
           </div>
 
-          {/* Insights */}
           <div style={{
             marginTop: '24px',
             padding: '16px',
@@ -295,7 +290,6 @@ const App = () => {
             )}
           </div>
 
-          {/* Tabs */}
           <div style={{
             display: 'flex',
             gap: '4px',
@@ -336,19 +330,22 @@ const App = () => {
           {activeTab === 'clean' && (
             <CleaningPanel
               data={data}
+              fileName={fileName}
               backendSessionId={backendSessionId}
               onDataCleaned={handleDataCleaned}
             />
           )}
 
-          {activeTab === 'clean' && (
-  <CleaningPanel
-    data={data}
-    fileName={fileName}
-    backendSessionId={backendSessionId}
-    onDataCleaned={handleDataCleaned}
-  />
-)}
+          {activeTab === 'charts' && (
+            <ChartPanel
+              data={data}
+              stats={stats}
+              dataContext={dataContext}
+              backendSessionId={backendSessionId}
+              cachedCharts={cachedCharts}
+              onChartsCached={setCachedCharts}
+            />
+          )}
 
           {activeTab === 'python charts' && (
             <MatplotlibCharts
