@@ -1,7 +1,7 @@
-import { exportCSV } from '../utils/exportCSV';
 import { useState } from 'react';
 import { cleanData } from '../utils/cleanData';
 import { cleanFileOnBackend } from '../utils/api';
+import { exportCSV } from '../utils/exportCSV';
 
 const CleaningPanel = ({ data, fileName, backendSessionId, onDataCleaned }) => {
   const [report, setReport] = useState(null);
@@ -95,16 +95,35 @@ const CleaningPanel = ({ data, fileName, backendSessionId, onDataCleaned }) => {
         </p>
 
         {report && (
-          <div style={{ marginTop: '16px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <ReportCard label="Duplicates Removed" value={report.duplicatesRemoved} color="#ef4444" />
-            <ReportCard label="Missing Values Filled" value={report.missingFilled} color="#d97706" />
-            <ReportCard label="Whitespace Fixed" value={report.whitespaceFixed} color="#059669" />
-            <ReportCard
-              label="Final Row Count"
-              value={report.totalRows - report.duplicatesRemoved}
-              color="#4f46e5"
-            />
-          </div>
+          <>
+            <div style={{ marginTop: '16px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <ReportCard label="Duplicates Removed" value={report.duplicatesRemoved} color="#ef4444" />
+              <ReportCard label="Missing Values Filled" value={report.missingFilled} color="#d97706" />
+              <ReportCard label="Whitespace Fixed" value={report.whitespaceFixed} color="#059669" />
+              <ReportCard
+                label="Final Row Count"
+                value={report.totalRows - report.duplicatesRemoved}
+                color="#4f46e5"
+              />
+            </div>
+
+            <button
+              onClick={() => exportCSV(data, fileName)}
+              style={{
+                marginTop: '16px',
+                padding: '10px 20px',
+                backgroundColor: '#059669',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                fontSize: '14px',
+              }}
+            >
+              Export Cleaned Data as CSV
+            </button>
+          </>
         )}
       </div>
     </div>
@@ -126,24 +145,5 @@ const ReportCard = ({ label, value, color }) => (
     <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>{label}</p>
   </div>
 );
-
-{report && (
-  <button
-    onClick={() => exportCSV(data, fileName)}
-    style={{
-      marginTop: '16px',
-      padding: '10px 20px',
-      backgroundColor: '#059669',
-      color: '#ffffff',
-      border: 'none',
-      borderRadius: '8px',
-      fontWeight: '600',
-      cursor: 'pointer',
-      fontSize: '14px',
-    }}
-  >
-    Export Cleaned Data as CSV
-  </button>
-)}
 
 export default CleaningPanel;
